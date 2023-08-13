@@ -129,8 +129,8 @@ const Game = () => {
   }, [Test, seconds, minutes]);
 
   return (
-    <section>
-      <div className="border-2 w-96 h-full rounded-lg bg-gray-100 shadow-2xl shadow-spread items-center m-auto mt-14">
+    <section className=" xl:w-96 p-4">
+      <div className="border-2  h-full rounded-lg bg-gray-100 shadow-2xl shadow-spread items-center m-auto mt-14">
         {Test ? (
           ShowResult ? (
             <QuizResult
@@ -143,7 +143,7 @@ const Game = () => {
               <h1 className="text-center  text-3xl font-bold  mt-6 font-serif">
                 Quiz Triumph
               </h1>
-              <div className="border-2 rounded-lg p-2 pt-1 text-center mt-2 ml-64 font-sans font-bold shadow-lg bg-cyan-200 shadow-spread  w-24  h-10">
+              <div className="border-2  rounded-lg p-2 pt-1 text-center mt-2 ml-64 font-sans font-bold shadow-lg bg-cyan-200 shadow-spread  xl:w-24 w-20  h-10">
                 <span>{minutes < 10 ? "0" + minutes : minutes} :</span>{" "}
                 <span>{seconds < 10 ? "0" + seconds : seconds}</span>
               </div>
@@ -241,7 +241,7 @@ const Game = () => {
             <h1 className="text-center text-3xl font-bold mt-4 font-serif">
               Quiz Triumph
             </h1>
-            <form className="items-center text-center pt-4 flex flex-col gap-6  outline-none ">
+            <form className="items-center  text-center pt-4 flex flex-col gap-6  outline-none ">
               <input
                 type="text"
                 name="Name"
@@ -265,11 +265,11 @@ const Game = () => {
                 onChange={(e) => SetEmail(e.target.value)}
               />
               {EmailError && <p className="text-red-500">{EmailError}</p>}
-              <select className="p-2 w-80 shadow-xl outline-none shadow-spread text-xl border-2 rounded-xl">
-                <option className="text-gray-400">Gender</option>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
+              <select className="p-2 w-80 shadow-xl outline-none shadow-spread xl:text-xl text-lg border-2 rounded-xl">
+                <option className="text-gray-400 text-lg">Gender</option>
+                <option className="text-lg">Male</option>
+                <option className="text-lg">Female</option>
+                <option className="text-lg">Other</option>
               </select>
               <input
                 type="text"
