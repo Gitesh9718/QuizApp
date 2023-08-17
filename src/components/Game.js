@@ -21,6 +21,10 @@ const Game = () => {
   const [questionData, setQuestionData] = useState([]);
   const [seconds, setSeconds] = useState(60);
   const [minutes, setMinutes] = useState(3);
+  const [color , setcolor] = useState("white")
+  const final = questionData[CurrentQuestion]?.incorrect_answers.concat(questionData[CurrentQuestion]?.correct_answer)
+  
+
 
   const ChangeQuestion = () => {
     UpdateScore();
@@ -37,13 +41,21 @@ const Game = () => {
       SetSubmit(true);
     }
   };
+  const show = () =>{
+    SetQuestion(1)
+    if (CurrentQuestion < questionData.length - 1){
+      SetQuestion(CurrentQuestion + 1);
+    }
+  }
 
+  console.log("selectedOption",selectedOptions,"updated",questionData)
   const UpdateScore = () => {
-    if (ClickOption === questionData[CurrentQuestion].answer) {
+    if (ClickOption === questionData[CurrentQuestion]?.correct_answer) {
+      console.log("Updating score");
       SetScore(CurrentScore + 1);
     }
   };
-
+  
   const PreviousQuestion = () => {
     if (CurrentQuestion >= 1) {
       SetQuestion(CurrentQuestion - 1);
@@ -52,14 +64,19 @@ const Game = () => {
   };
 
   const handleOptionClick = (optionIndex) => {
+    console.log("Clicked option index:", optionIndex);
+    
     SetClickOption(optionIndex);
+    
+    console.log("ClickOption state after update:", ClickOption);
+    
     setSelectedOptions((prevOptions) => {
       const updatedOptions = [...prevOptions];
       updatedOptions[CurrentQuestion] = optionIndex;
       return updatedOptions;
     });
   };
-  const onValidate = () => {
+    const onValidate = () => {
     let isValid = true;
     if (Name === "") {
       alert("Name is Required");
@@ -81,6 +98,18 @@ const Game = () => {
     }
     return isValid;
   };
+  // const AnswerKey = () =>{
+  //   SetShowResult(false)
+  //   setMinutes(0)
+  //   setSeconds(0)
+  //   SetSubmit(false)
+  //   show()
+  //   if(ClickOption === questionData[CurrentQuestion]?.correct_answer){
+  //     setcolor("orange")
+  //   }else{
+  //     setcolor("red")
+  //   }
+  // }
   const StartTest = () => {
     if (onValidate()) {
       SetTest(true);
@@ -129,28 +158,30 @@ const Game = () => {
   }, [Test, seconds, minutes]);
 
   return (
-    <section className=" xl:w-96 p-4">
-      <div className="border-2  h-full rounded-lg bg-gray-100 shadow-2xl shadow-spread items-center m-auto mt-14">
+    <section className="flex justify-center items-center ">
+      <div className="border-2  w-96   rounded-lg bg-gray-100 shadow-2xl shadow-spread items-center m-auto mt-14">
         {Test ? (
           ShowResult ? (
             <QuizResult
               score={CurrentScore}
               totalScore={questionData.length}
+              // rang = {AnswerKey}
               name={Name}
             />
+
           ) : (
             <>
               <h1 className="text-center  text-3xl font-bold  mt-6 font-serif">
                 Quiz Triumph
               </h1>
-              <div className="border-2  rounded-lg p-2 pt-1 text-center mt-2 ml-64 font-sans font-bold shadow-lg bg-cyan-200 shadow-spread  xl:w-24 w-20  h-10">
+              <div className="border-2  rounded-lg p-2 pt-1 text-center mt-2 ml-64 font-sans font-bold shadow-lg bg-cyan-200 shadow-spread  w-24   h-10">
                 <span>{minutes < 10 ? "0" + minutes : minutes} :</span>{" "}
                 <span>{seconds < 10 ? "0" + seconds : seconds}</span>
               </div>
-              <div className="border-2 gap-2 p-4 w-80 h-auto rounded-lg shadow-lg shadow-spread items-center m-auto mt-2">
+              <div className="border-2 gap-2  xl:w-80 xl:px-2 xl:h-auto h-auto rounded-lg shadow-lg shadow-spread items-center m-auto mt-2">
                 <div className="flex items-start">
                   <span className="text-lg font-bold mr-2">
-                    {CurrentQuestion + 1}.
+                    {CurrentQuestion + 1}
                   </span>
                   <div
                     className="text-md font-semibold font-serif"
@@ -161,42 +192,19 @@ const Game = () => {
                 </div>
               </div>
               <div className="">
-                {/* Render incorrect options */}
-                {questionData[CurrentQuestion]?.incorrect_answers.map(
+                {final.sort().map(
                   (option, i) => (
                     <button
                       className={`border-2 hover:bg-green-500 font-medium text-lg font-serif w-80 h-12 shadow-lg shadow-spread hover:shadow-none rounded-lg hover:shadow-none mt-4 flex justify-center items-center m-auto ${
-                        ClickOption === i + 1 ? "selected-option" : ""
+                        ClickOption === option ? "selected-option" : ""
                       }`}
                       key={i}
-                      onClick={() => handleOptionClick(i + 1)}
+                      onClick={() => handleOptionClick(option)}
                     >
                       <span dangerouslySetInnerHTML={{ __html: option }} />
                     </button>
                   )
                 )}
-
-                {/* Render correct option */}
-                <button
-                  className={`border-2 hover:bg-green-500 font-medium text-lg font-serif w-80 h-12 shadow-lg shadow-spread hover:shadow-none rounded-lg hover:shadow-none mt-4 flex justify-center items-center m-auto ${
-                    ClickOption ===
-                    questionData[CurrentQuestion]?.incorrect_answers.length + 1
-                      ? "selected-option"
-                      : ""
-                  }`}
-                  onClick={() =>
-                    handleOptionClick(
-                      questionData[CurrentQuestion]?.incorrect_answers.length +
-                        1
-                    )
-                  }
-                >
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: questionData[CurrentQuestion]?.correct_answer,
-                    }}
-                  />
-                </button>
               </div>
               <div className="flex flex-row-reverse">
                 {Submit ? (
@@ -238,6 +246,7 @@ const Game = () => {
           )
         ) : (
           <>
+          <div className="w-96 p-4">
             <h1 className="text-center text-3xl font-bold mt-4 font-serif">
               Quiz Triumph
             </h1>
@@ -295,6 +304,7 @@ const Game = () => {
                 </button>
               </div>
             </form>
+            </div>
           </>
         )}
       </div>
